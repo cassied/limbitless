@@ -1,5 +1,7 @@
 package com.mucsc3550.cassie.framework;
 
+import java.util.HashMap;
+
 public class Assets {
     public static Pixmap background;
     public static Pixmap logo;
@@ -18,4 +20,9 @@ public class Assets {
     public static Pixmap hangman;
 
     public static Sound click;
+    
+    public static final HashMap<Integer, HashMap<Integer, Character>> keys = new HashMap<Integer, HashMap<Integer, Character>>();
+    public static HashMap<Integer,Character> row1 = new HashMap<Integer,Character>();
+    public static HashMap<Integer,Character> row2 = new HashMap<Integer,Character>();
+    public static HashMap<Integer,Character> row3 = new HashMap<Integer,Character>();
 }
