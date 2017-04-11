@@ -19,7 +19,6 @@ public class GamePlay extends Screen {
         line1 = null;
         line2 = null;
         pickWord();
-        g.drawPixmap(Assets.background, 0, 0);
         g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
         g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
         g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
@@ -44,6 +43,7 @@ public class GamePlay extends Screen {
                     GetCharacterFromCoordinates(event.x, event.y);
 
                     Log.d("GamePlay", letter + " x: " +xKey + " y: " +yKey);
+                    drawRightLetter(g, line1, 200);
                 }
             }
         }
@@ -51,11 +51,7 @@ public class GamePlay extends Screen {
 
     @Override
     public void present(double deltaTime) {
-        //draw left leg gone!
-        //g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
-
-        //draw right leg gone!
-        //g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
+        g.drawPixmap(Assets.background, 0, 0);
 
         drawBlanks(g, line1.length(), 205);
         if(line2 != null) {
@@ -77,7 +73,7 @@ public class GamePlay extends Screen {
         int x = (320 - (len*22)) / 2;
         for(int i = 0; i < len; i++) {
             char character = word.charAt(i);
-            int srcX = 0; 
+            int srcX = 0;
 
             srcX = ((int) character - 97) * 25;
 
@@ -132,5 +128,27 @@ public class GamePlay extends Screen {
         if(xKey == -1) return;
 
         letter = currentRow.get(xKey);
+    }
+
+    private void drawRightLetter(Graphics g, String word, int y) {
+        int x = ((320 - (word.length()*22)) / 2);
+        int srcX = ((int) letter - 97) * 25;
+
+        if(word.indexOf(letter) > -1) {
+            x = x + (22* word.indexOf(letter));
+        }
+        else {
+            return;
+        }
+        g.drawPixmap(Assets.letters, x, y, srcX, 0, 22, 32);
+    }
+
+    private void drawLimb(Graphics g) {
+        //draw left leg gone!
+        //g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
+
+        //draw right leg gone!
+        //g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
+
     }
 }
