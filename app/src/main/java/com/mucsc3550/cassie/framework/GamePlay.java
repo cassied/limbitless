@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GamePlay extends Screen {
     public static String line1, line2;
-    public static char Character = '\0';
+    public static char letter = '\0';
     public static int xKey, yKey;
     Graphics g = game.getGraphics();
 
@@ -42,8 +42,8 @@ public class GamePlay extends Screen {
                         Assets.click.play(1);
 
                     GetCharacterFromCoordinates(event.x, event.y);
-                    
-                    Log.d("GamePlay", Character + " x: " +xKey + " y: " +yKey);
+
+                    Log.d("GamePlay", letter + " x: " +xKey + " y: " +yKey);
                 }
             }
         }
@@ -57,9 +57,9 @@ public class GamePlay extends Screen {
         //draw right leg gone!
         //g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
 
-        drawBlanks(g, line1, 205);
+        drawBlanks(g, line1.length(), 205);
         if(line2 != null) {
-            drawBlanks(g, line2, 255);
+            drawBlanks(g, line2.length(), 255);
         }
     }
 
@@ -77,21 +77,18 @@ public class GamePlay extends Screen {
         int x = (320 - (len*22)) / 2;
         for(int i = 0; i < len; i++) {
             char character = word.charAt(i);
-
-            int srcX = 0;
-            int srcWidth = 0;
+            int srcX = 0; 
 
             srcX = ((int) character - 97) * 25;
-            srcWidth = 22;
 
-            g.drawPixmap(Assets.letters, x, y, srcX, 0, srcWidth, 32);
-            x+= srcWidth;
+            g.drawPixmap(Assets.letters, x, y, srcX, 0, 22, 32);
+            x+= 22;
         }
     }
     private void pickWord() {
-        int random = (int)(Math.random() * (AndroidGame.easyWords.length));
+        int random = (int)(Math.random() * (AndroidGame.words.length));
 
-        String word = AndroidGame.easyWords[random];
+        String word = AndroidGame.words[random];
         if(word.matches(".*\\s+.*")) {
             String[] split = word.split("\\s+");
             line1 = split[0];
@@ -101,8 +98,7 @@ public class GamePlay extends Screen {
             line1 = word;
         }
     }
-    private void drawBlanks(Graphics g, String word, int y) {
-        int len = word.length();
+    private void drawBlanks(Graphics g, int len, int y) {
         int x = (320 - (len*22)) / 2;
         for(int i = 0; i < len; i++) {
             g.drawPixmap(Assets.letters, x, y, 650, 0, 22, 32);
@@ -112,7 +108,7 @@ public class GamePlay extends Screen {
     private void GetCharacterFromCoordinates(int x, int y) {
         yKey = -1;
         xKey = -1;
-        Character = '\0';
+        letter = '\0';
 
         ArrayList<Integer> yList = new ArrayList<Integer>(Assets.keys.keySet());
         Collections.sort(yList);
@@ -135,6 +131,6 @@ public class GamePlay extends Screen {
 
         if(xKey == -1) return;
 
-        Character = currentRow.get(xKey);
+        letter = currentRow.get(xKey);
     }
 }
