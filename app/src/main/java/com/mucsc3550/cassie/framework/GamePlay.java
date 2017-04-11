@@ -127,26 +127,18 @@ public class GamePlay extends Screen {
                 yKey = tempYKey;
             }
         }
-
-        if(yKey == -1) {
-            return;
-        }
+        if(yKey == -1) return;
 
         HashMap<Integer, Character> currentRow = Assets.keys.get(yKey);
         ArrayList<Integer> xList = new ArrayList<Integer>(currentRow.keySet());
         Collections.sort(xList);
-
-        Log.d("GetChar","ykey " +yKey);
 
         for(int tempXKey : xList){
             if(tempXKey <= x ){
                 xKey = tempXKey;
             }
         }
-
-        if(xKey == -1) {
-            return;
-        }
+        if(xKey == -1) return;
 
         Character = currentRow.get(xKey);
     }
