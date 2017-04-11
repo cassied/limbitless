@@ -1,0 +1,95 @@
+<resources>
+    <string-array name="easy">
+        <item>aardvark</item>
+        <item>bedroom</item>
+        <item>basket weave</item>
+        <item>develop</item>
+        <item>candlelight</item>
+        <item>direction</item>
+        <item>chicken coop</item>
+        <item>farmer</item>
+        <item>garden</item>
+        <item>freeze</item>
+        <item>friendship</item>
+        <item>gentleman</item>
+        <item>happiness</item>
+        <item>be yourself</item>
+        <item>come back</item>
+        <item>look up</item>
+        <item>game on</item>
+        <item>real deal</item>
+        <item>move over</item>
+        <item>open sesame</item>
+        <item>act normal</item>
+        <item>push here</item>
+        <item>derivative</item>
+        <item>detour ahead</item>
+        <item>silly sayings</item>
+        <item>boiling water</item>
+        <item>grocery list</item>
+        <item>happy house</item>
+        <item>dexterity</item>
+        <item>breakfast</item>
+        <item>dad jokes</item>
+        <item>spread out</item>
+        <item>crossroads</item>
+        <item>mic drop</item>
+    </string-array>
+
+    <string-array name="medium">
+        <item>wax figures</item>
+        <item>buttered popcorn</item>
+        <item>round cheeses</item>
+        <item>soggy waves</item>
+        <item>brainy beggar</item>
+        <item>chubby cats</item>
+        <item>fuzzy bats</item>
+        <item>greedy giants</item>
+        <item>shake shake</item>
+        <item>sneaky sponge</item>
+        <item>neon signage</item>
+        <item>phlegm</item>
+        <item>forethought</item>
+        <item>bashful bunny</item>
+        <item>evil villain</item>
+        <item>vanilla beans</item>
+        <item>sweet treat</item>
+        <item>girl power</item>
+        <item>long winded</item>
+        <item>offensive smells</item>
+        <item>mischievous act</item>
+    </string-array>
+
+    <string-array name="hard">
+        <item>defective twist</item>
+        <item>scintillating nut</item>
+        <item>screeching silence</item>
+        <item>snobbish sidewalk</item>
+        <item>cumbersome cobweb</item>
+        <item>grouchy guitarist</item>
+        <item>stone walkway</item>
+        <item>scandalous crowd</item>
+        <item>detailed playground</item>
+        <item>squeezed crayon</item>
+        <item>slackline shenanigans</item>
+        <item>photographic arithmetic</item>
+        <item>gnarly rollerskating</item>
+        <item>askewed spectacles</item>
+        <item>luxurious haikus</item>
+        <item>cantankerous nymphs</item>
+        <item>understandable malarkey</item>
+        <item>oolong whiskey</item>
+        <item>nonsensical agreement</item>
+        <item>figureoutable</item>
+        <item>absquatulate</item>
+        <item>sockdolager</item>
+        <item>querulous nincompoop</item>
+        <item>susurrus corn stalks</item>
+        <item>vituperative limes</item>
+        <item>informal brainteaser</item>
+        <item>belligerent tomatoes</item>
+        <item>incandescent potato</item>
+        <item>packaged yams</item>
+        <item>enjoyable conundrum</item>
+    </string-array>
+</resources>
