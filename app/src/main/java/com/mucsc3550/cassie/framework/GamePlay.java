@@ -105,13 +105,8 @@ public class GamePlay extends Screen {
         int len = word.length();
         int x = (320 - (len*22)) / 2;
         for(int i = 0; i < len; i++) {
-            char character = word.charAt(i);
-
-            int srcWidth = 22;
-            int srcX = 650;
-
-            g.drawPixmap(Assets.letters, x, y, srcX, 0, srcWidth, 32);
-            x+= srcWidth;
+            g.drawPixmap(Assets.letters, x, y, 650, 0, 22, 32);
+            x+= 22;
         }
     }
     private void GetCharacterFromCoordinates(int x, int y) {
@@ -123,10 +118,10 @@ public class GamePlay extends Screen {
         Collections.sort(yList);
 
         for(int tempYKey : yList){
-            if(tempYKey <= y ){
+            if(tempYKey <= y )
                 yKey = tempYKey;
-            }
         }
+
         if(yKey == -1) return;
 
         HashMap<Integer, Character> currentRow = Assets.keys.get(yKey);
@@ -134,10 +129,10 @@ public class GamePlay extends Screen {
         Collections.sort(xList);
 
         for(int tempXKey : xList){
-            if(tempXKey <= x ){
+            if(tempXKey <= x )
                 xKey = tempXKey;
-            }
         }
+
         if(xKey == -1) return;
 
         Character = currentRow.get(xKey);
