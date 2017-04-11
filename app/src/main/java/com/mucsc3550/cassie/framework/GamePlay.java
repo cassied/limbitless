@@ -1,14 +1,17 @@
 package com.mucsc3550.cassie.framework;
 
 import android.util.Log;
-import android.widget.Toast;
 import com.mucsc3550.cassie.framework.impl.AndroidGame;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class GamePlay extends Screen {
     public static String line1, line2;
-    public static int letter = 0;
+    public static char Character = '\0';
+    public static int xKey, yKey;
     Graphics g = game.getGraphics();
 
     public GamePlay(Game game) {
@@ -38,7 +41,9 @@ public class GamePlay extends Screen {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
 
-                    keyboardInBounds(event.x, event.y);
+                    GetCharacterFromCoordinates(event.x, event.y);
+                    
+                    Log.d("GamePlay", Character + " x: " +xKey + " y: " +yKey);
                 }
             }
         }
@@ -46,22 +51,15 @@ public class GamePlay extends Screen {
 
     @Override
     public void present(double deltaTime) {
-
         //draw left leg gone!
         //g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
 
         //draw right leg gone!
         //g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
 
-        //drawText(g, line1, 200);
-
         drawBlanks(g, line1, 205);
         if(line2 != null) {
             drawBlanks(g, line2, 255);
-        }
-        if(letter != 0) {
-            Log.d("GamePlay", "Letter: " +(char) letter);
-            letter = 0;
         }
     }
 
@@ -116,17 +114,40 @@ public class GamePlay extends Screen {
             x+= srcWidth;
         }
     }
-    private void keyboardInBounds(int x, int y) {
-        if(y >= 320 && y <= 372) {
-            Log.d("GamePlay", "1st row" + x);
-            g.drawPixmap(Assets.keyboard_pressed, 0, 310, 0, 0, 320, 63);
-            letter = 65;
+    private void GetCharacterFromCoordinates(int x, int y) {
+        yKey = -1;
+        xKey = -1;
+        Character = '\0';
+
+        ArrayList<Integer> yList = new ArrayList<Integer>(Assets.keys.keySet());
+        Collections.sort(yList);
+
+        for(int tempYKey : yList){
+            if(tempYKey <= y ){
+                yKey = tempYKey;
+            }
         }
-        else if(y >= 373 && y <= 425) {
-            Log.d("GamePlay", "2nd row");
+
+        if(yKey == -1) {
+            return;
         }
-        else if(y >= 426 && y <= 478) {
-            Log.d("GamePlay", "3rd row");
+
+        HashMap<Integer, Character> currentRow = Assets.keys.get(yKey);
+        ArrayList<Integer> xList = new ArrayList<Integer>(currentRow.keySet());
+        Collections.sort(xList);
+
+        Log.d("GetChar","ykey " +yKey);
+
+        for(int tempXKey : xList){
+            if(tempXKey <= x ){
+                xKey = tempXKey;
+            }
         }
+
+        if(xKey == -1) {
+            return;
+        }
+
+        Character = currentRow.get(xKey);
     }
 }
