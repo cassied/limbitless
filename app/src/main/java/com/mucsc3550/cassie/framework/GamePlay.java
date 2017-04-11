@@ -1,19 +1,25 @@
 package com.mucsc3550.cassie.framework;
 
-
-import com.mucsc3550.cassie.R;
+import android.util.Log;
+import android.widget.Toast;
 import com.mucsc3550.cassie.framework.impl.AndroidGame;
 
 import java.util.List;
 
 public class GamePlay extends Screen {
     public static String line1, line2;
+    public static int letter = 0;
+    Graphics g = game.getGraphics();
 
     public GamePlay(Game game) {
         super(game);
         line1 = null;
         line2 = null;
         pickWord();
+        g.drawPixmap(Assets.background, 0, 0);
+        g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
+        g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
+        g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
     }
 
     @Override
@@ -28,18 +34,18 @@ public class GamePlay extends Screen {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                 }
+                if(event.y >= 320) {
+                    if(Settings.soundEnabled)
+                        Assets.click.play(1);
+
+                    keyboardInBounds(event.x, event.y);
+                }
             }
         }
     }
 
     @Override
     public void present(double deltaTime) {
-        Graphics g = game.getGraphics();
-
-        g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
-        g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
-        g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
 
         //draw left leg gone!
         //g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
@@ -52,6 +58,10 @@ public class GamePlay extends Screen {
         drawBlanks(g, line1, 205);
         if(line2 != null) {
             drawBlanks(g, line2, 255);
+        }
+        if(letter != 0) {
+            Log.d("GamePlay", "Letter: " +(char) letter);
+            letter = 0;
         }
     }
 
@@ -104,6 +114,19 @@ public class GamePlay extends Screen {
 
             g.drawPixmap(Assets.letters, x, y, srcX, 0, srcWidth, 32);
             x+= srcWidth;
+        }
+    }
+    private void keyboardInBounds(int x, int y) {
+        if(y >= 320 && y <= 372) {
+            Log.d("GamePlay", "1st row" + x);
+            g.drawPixmap(Assets.keyboard_pressed, 0, 310, 0, 0, 320, 63);
+            letter = 65;
+        }
+        else if(y >= 373 && y <= 425) {
+            Log.d("GamePlay", "2nd row");
+        }
+        else if(y >= 426 && y <= 478) {
+            Log.d("GamePlay", "3rd row");
         }
     }
 }

@@ -15,6 +15,7 @@ public class LoadingScreen extends Screen {
         Assets.logo = g.newPixmap("logo.png", Graphics.PixmapFormat.ARGB4444);
         Assets.mainMenu = g.newPixmap("mainmenu.png", Graphics.PixmapFormat.ARGB4444);
         Assets.keyboard = g.newPixmap("keyboard.png", Graphics.PixmapFormat.ARGB4444);
+        Assets.keyboard_pressed = g.newPixmap("keyboard_pressed.png", Graphics.PixmapFormat.ARGB4444);
         Assets.logo = g.newPixmap("logo.png", Graphics.PixmapFormat.ARGB4444);
         Assets.buttons = g.newPixmap("buttons.png", Graphics.PixmapFormat.ARGB4444);
         Assets.help1 = g.newPixmap("help1.png", Graphics.PixmapFormat.ARGB4444);
