@@ -1,5 +1,5 @@
 <resources>
-    <string-array name="easy">
+    <string-array name="words">
         <item>aardvark</item>
         <item>bedroom</item>
         <item>basket weave</item>
@@ -34,9 +34,6 @@
         <item>spread out</item>
         <item>crossroads</item>
         <item>mic drop</item>
-    </string-array>
-
-    <string-array name="medium">
         <item>wax figures</item>
         <item>buttered popcorn</item>
         <item>round cheeses</item>
@@ -58,9 +55,6 @@
         <item>long winded</item>
         <item>offensive smells</item>
         <item>mischievous act</item>
-    </string-array>
-
-    <string-array name="hard">
         <item>defective twist</item>
         <item>scintillating nut</item>
         <item>screeching silence</item>

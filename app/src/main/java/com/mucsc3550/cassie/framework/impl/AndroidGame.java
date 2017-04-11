@@ -33,7 +33,7 @@ public abstract class AndroidGame extends Activity implements Game {
     Input input;
     FileIO fileIO;
     Screen screen;
-    public static String[] easyWords, mediumWords, hardWords;
+    public static String[] words;
     final private int REQUEST_READ_EXTERNAL_STORAGE = 123;
     final private int REQUEST_WRITE_EXTERNAL_STORAGE = 123;
 
@@ -63,9 +63,7 @@ public abstract class AndroidGame extends Activity implements Game {
                 / displaymetrics.heightPixels;
 
 
-        easyWords = getResources().getStringArray(R.array.easy);
-        mediumWords = getResources().getStringArray(R.array.medium);
-        hardWords = getResources().getStringArray(R.array.hard);
+        words = getResources().getStringArray(R.array.words);
 
         renderView = new AndroidFastRenderView(this, frameBuffer);
         graphics = new AndroidGraphics(getAssets(), frameBuffer);
