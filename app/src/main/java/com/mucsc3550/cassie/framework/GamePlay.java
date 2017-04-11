@@ -10,15 +10,19 @@ import java.util.List;
 
 public class GamePlay extends Screen {
     public static String line1, line2;
+    public static boolean checkGuess;
+    ArrayList<Character> guessedLetters = new ArrayList<Character>();
     public static char letter = '\0';
-    public static int xKey, yKey;
+    public static int xKey, yKey, chances = 0, rightGuesses = 0, wordLen = 0;
     Graphics g = game.getGraphics();
 
     public GamePlay(Game game) {
         super(game);
-        line1 = null;
-        line2 = null;
         pickWord();
+    }
+
+    private void drawGameWorld(Graphics g) {
+        g.drawPixmap(Assets.background, 0, 0);
         g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
         g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
         g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
@@ -36,14 +40,27 @@ public class GamePlay extends Screen {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                 }
-                if(event.y >= 320) {
+                else if(event.y >= 320) {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
 
                     GetCharacterFromCoordinates(event.x, event.y);
 
                     Log.d("GamePlay", letter + " x: " +xKey + " y: " +yKey);
-                    drawRightLetter(g, line1, 200);
+
+                    if(!guessedLetters.contains(letter)) {
+                        checkGuess = checkLetterGuess(line1, 200);
+                        if (line2 != null)
+                            checkGuess = checkLetterGuess(line2, 250);
+
+                        if(!checkGuess)
+                            drawLimb(g);
+
+                    }
+
+                    gameStatus();
+                    checkGuess = false;
+
                 }
             }
         }
@@ -51,9 +68,8 @@ public class GamePlay extends Screen {
 
     @Override
     public void present(double deltaTime) {
-        g.drawPixmap(Assets.background, 0, 0);
-
         drawBlanks(g, line1.length(), 205);
+
         if(line2 != null) {
             drawBlanks(g, line2.length(), 255);
         }
@@ -68,31 +84,29 @@ public class GamePlay extends Screen {
     @Override
     public void dispose() {}
 
-    private void drawText(Graphics g, String word, int y) {
-        int len = word.length();
-        int x = (320 - (len*22)) / 2;
-        for(int i = 0; i < len; i++) {
-            char character = word.charAt(i);
-            int srcX = 0;
-
-            srcX = ((int) character - 97) * 25;
-
-            g.drawPixmap(Assets.letters, x, y, srcX, 0, 22, 32);
-            x+= 22;
-        }
-    }
     private void pickWord() {
+        chances = 0;
+        rightGuesses = 0;
+        line1 = null;
+        line2 = null;
+        guessedLetters.clear();
+
         int random = (int)(Math.random() * (AndroidGame.words.length));
 
         String word = AndroidGame.words[random];
+
         if(word.matches(".*\\s+.*")) {
             String[] split = word.split("\\s+");
             line1 = split[0];
             line2 = split[1];
+            wordLen = line1.length() + line2.length();
         }
         else {
             line1 = word;
+            wordLen = word.length();
         }
+
+        drawGameWorld(g);
     }
     private void drawBlanks(Graphics g, int len, int y) {
         int x = (320 - (len*22)) / 2;
@@ -128,18 +142,34 @@ public class GamePlay extends Screen {
         if(xKey == -1) return;
 
         letter = currentRow.get(xKey);
+
     }
 
-    private void drawRightLetter(Graphics g, String word, int y) {
-        int x = ((320 - (word.length()*22)) / 2);
+    private Boolean checkLetterGuess(String word, int y) {
+        boolean rightGuess = false;
+        Log.d("check", "word: " +word);
+
+        for(int i = 0; i < word.length(); i++) {
+            if(word.charAt(i) == letter) {
+                drawRightLetter(g, word, y, i);
+                rightGuess = true;
+                rightGuesses++;
+            }
+        }
+
+        guessedLetters.add(letter);
+
+        if(checkGuess) {
+            return true;
+        }
+        else
+            return rightGuess;
+
+    }
+    private void drawRightLetter(Graphics g, String word, int y, int position) {
+        int x = ((320 - (word.length()*22)) / 2)  + (22 * position);
         int srcX = ((int) letter - 97) * 25;
 
-        if(word.indexOf(letter) > -1) {
-            x = x + (22* word.indexOf(letter));
-        }
-        else {
-            return;
-        }
         g.drawPixmap(Assets.letters, x, y, srcX, 0, 22, 32);
     }
 
@@ -149,6 +179,18 @@ public class GamePlay extends Screen {
 
         //draw right leg gone!
         //g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
+        chances++;
+        Log.d("Wrong", "WRONG!!!");
+    }
 
+    private void gameStatus() {
+        if(chances > 5) {
+            Log.d("Over","Game Over!");
+            pickWord();
+        }
+        else if(rightGuesses == wordLen) {
+            Log.d("Won", "You Won!");
+            pickWord();
+        }
     }
 }

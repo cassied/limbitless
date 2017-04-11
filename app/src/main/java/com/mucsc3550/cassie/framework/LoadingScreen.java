@@ -36,38 +36,41 @@ public class LoadingScreen extends Screen {
     }
 
     private void populateKeys() {
-        Assets.row1.put(5, 'q');
-        Assets.row1.put(40, 'w');
-        Assets.row1.put(70, 'e');
-        Assets.row1.put(100, 'r');
-        Assets.row1.put(130, 't');
-        Assets.row1.put(160, 'y');
-        Assets.row1.put(190, 'u');
-        Assets.row1.put(220, 'i');
-        Assets.row1.put(250, 'o');
-        Assets.row1.put(280, 'p');
+        Assets.row1.put(9, 'q');
+        Assets.row1.put(42, 'w');
+        Assets.row1.put(82, 'e');
+        Assets.row1.put(107, 'r');
+        Assets.row1.put(137, 't');
+        Assets.row1.put(166, 'y');
+        Assets.row1.put(196, 'u');
+        Assets.row1.put(227, 'i');
+        Assets.row1.put(248, 'o');
+        Assets.row1.put(282, 'p');
+        Assets.row1.put(312, '\0');
 
-        Assets.row2.put(5, 'a');
-        Assets.row2.put(40, 's');
-        Assets.row2.put(70, 'd');
-        Assets.row2.put(100, 'f');
-        Assets.row2.put(130, 'g');
-        Assets.row2.put(160, 'h');
-        Assets.row2.put(190, 'j');
-        Assets.row2.put(220, 'k');
-        Assets.row2.put(250, 'l');
+        Assets.row2.put(27, 'a');
+        Assets.row2.put(58, 's');
+        Assets.row2.put(89, 'd');
+        Assets.row2.put(121, 'f');
+        Assets.row2.put(147, 'g');
+        Assets.row2.put(180, 'h');
+        Assets.row2.put(213, 'j');
+        Assets.row2.put(235, 'k');
+        Assets.row2.put(267, 'l');
+        Assets.row2.put(293, '\0');
 
-        Assets.row3.put(70, 'z');
-        Assets.row3.put(100, 'x');
-        Assets.row3.put(130, 'c');
-        Assets.row3.put(160, 'v');
-        Assets.row3.put(190, 'b');
-        Assets.row3.put(220, 'n');
-        Assets.row3.put(250, 'm');
+        Assets.row3.put(49, 'z');
+        Assets.row3.put(77, 'x');
+        Assets.row3.put(108, 'c');
+        Assets.row3.put(140, 'v');
+        Assets.row3.put(170, 'b');
+        Assets.row3.put(201, 'n');
+        Assets.row3.put(234, 'm');
+        Assets.row3.put(271, '\0');
 
         Assets.keys.put(320, Assets.row1);
         Assets.keys.put(372, Assets.row2);
-        Assets.keys.put(434, Assets.row3);
+        Assets.keys.put(422, Assets.row3);
     }
 
     @Override

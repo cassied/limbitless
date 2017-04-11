@@ -48,20 +48,15 @@ public abstract class AndroidGame extends Activity implements Game {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        int frameBufferWidth = isLandscape ? 480 : 320;
-        int frameBufferHeight = isLandscape ? 320 : 480;
-        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth,
-                frameBufferHeight, Config.RGB_565);
+        int frameBufferWidth = 320;
+        int frameBufferHeight = 480;
+        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.RGB_565);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
-        float scaleX = (float) frameBufferWidth
-                / displaymetrics.widthPixels;
-        float scaleY = (float) frameBufferHeight
-                / displaymetrics.heightPixels;
-
+        float scaleX = (float) frameBufferWidth / displaymetrics.widthPixels;
+        float scaleY = (float) frameBufferHeight / displaymetrics.heightPixels;
 
         words = getResources().getStringArray(R.array.words);
 
