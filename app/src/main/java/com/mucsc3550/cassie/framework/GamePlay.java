@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
 public class GamePlay extends Screen {
     ArrayList<Character> guessedLetters = new ArrayList<Character>();
     public static String line1, line2;
@@ -254,6 +253,9 @@ public class GamePlay extends Screen {
 
     private void gameStatus() {
         if(chances > 5) {
+            Settings.addScore(score);
+            Settings.save(game.getFileIO());
+
             score = 0;
             gameOver = true;
         }
