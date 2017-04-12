@@ -7,38 +7,64 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
 
 public class GamePlay extends Screen {
     public static String line1, line2;
-    public static boolean checkGuess;
+    public static boolean checkGuess, gameOver = false;
     ArrayList<Character> guessedLetters = new ArrayList<Character>();
     public static char letter = '\0';
     public static int xKey, yKey, chances = 0, rightGuesses = 0, wordLen = 0;
-    Graphics g = game.getGraphics();
+
+    enum GameState {
+        Running,
+        GameOver
+    }
+    GameState state = GameState.Running;
+    int score = 0;
 
     public GamePlay(Game game) {
         super(game);
+        gameOver = false;
+        state = GameState.Running;
         pickWord();
-    }
-
-    private void drawGameWorld(Graphics g) {
-        g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
-        g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
-        g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
     }
 
     @Override
     public void update(double deltaTime) {
         List<Input.TouchEvent> touchEvents = game.getInput().getTouchEvents();
+
+        if(state == GameState.Running)
+            updateRunning(touchEvents);
+        if(state == GameState.GameOver)
+            updateGameOver(touchEvents);
+    }
+
+    private void updateGameOver(List<Input.TouchEvent> touchEvents) {
+        int len = touchEvents.size();
+        for(int i = 0; i < len; i++) {
+            Input.TouchEvent event = touchEvents.get(i);
+            if(event.type == Input.TouchEvent.TOUCH_UP) {
+                if(event.x >= 128 && event.x <= 192 && event.y >= 220 && event.y <= 284) {
+                    if(Settings.soundEnabled)
+                        Assets.click.play(1);
+                    game.setScreen(new MainMenuScreen(game));
+                    return;
+                }
+            }
+        }
+    }
+
+    private void updateRunning(List<Input.TouchEvent> touchEvents) {
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             Input.TouchEvent event = touchEvents.get(i);
             if(event.type == Input.TouchEvent.TOUCH_UP) {
                 if(event.x < 32 && event.y < 32) {
-                    game.setScreen(new MainMenuScreen(game));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
+                    game.setScreen(new MainMenuScreen(game));
                 }
                 else if(event.y >= 320) {
                     if(Settings.soundEnabled)
@@ -54,7 +80,7 @@ public class GamePlay extends Screen {
                             checkGuess = checkLetterGuess(line2, 250);
 
                         if(!checkGuess)
-                            drawLimb(g);
+                            drawLimb();
 
                     }
 
@@ -64,10 +90,35 @@ public class GamePlay extends Screen {
                 }
             }
         }
+
+        if(gameOver) {
+            state = GameState.GameOver;
+        }
     }
 
     @Override
     public void present(double deltaTime) {
+        Graphics g = game.getGraphics();
+
+        if(state == GameState.Running)
+            drawRunningUI();
+        if(state == GameState.GameOver)
+            drawGameOverUI();
+
+    }
+
+    private void drawRunningUI() {
+        Graphics g = game.getGraphics();
+        g.drawPixmap(Assets.buttons, 0, 0, 0, 193, 32, 32);
+    }
+
+    private void drawGameWorld() {
+        Graphics g = game.getGraphics();
+
+        g.drawPixmap(Assets.background, 0, 0);
+        g.drawPixmap(Assets.keyboard, 0, 310, 0, 0, 320, 165);
+        g.drawPixmap(Assets.hangman, 119, 10, 0, 0, 82, 167);
+
         drawBlanks(g, line1.length(), 205);
 
         if(line2 != null) {
@@ -75,14 +126,28 @@ public class GamePlay extends Screen {
         }
     }
 
+    private void drawGameOverUI() {
+        Graphics g = game.getGraphics();
+        g.drawPixmap(Assets.gameOver, 55, 150);
+        g.drawPixmap(Assets.buttons, 128, 220, 0, 128, 64, 64);
+    }
+
     @Override
-    public void pause() {}
+    public void pause() {
+        if(gameOver) {
+            Settings.addScore(score);
+            Settings.save(game.getFileIO());
+        }
+    }
 
     @Override
     public void resume() {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        Settings.addScore(score);
+        Settings.save(game.getFileIO());
+    }
 
     private void pickWord() {
         chances = 0;
@@ -105,9 +170,9 @@ public class GamePlay extends Screen {
             line1 = word;
             wordLen = word.length();
         }
-
-        drawGameWorld(g);
+        drawGameWorld();
     }
+
     private void drawBlanks(Graphics g, int len, int y) {
         int x = (320 - (len*22)) / 2;
         for(int i = 0; i < len; i++) {
@@ -115,6 +180,7 @@ public class GamePlay extends Screen {
             x+= 22;
         }
     }
+
     private void GetCharacterFromCoordinates(int x, int y) {
         yKey = -1;
         xKey = -1;
@@ -142,10 +208,10 @@ public class GamePlay extends Screen {
         if(xKey == -1) return;
 
         letter = currentRow.get(xKey);
-
     }
 
     private Boolean checkLetterGuess(String word, int y) {
+        Graphics g = game.getGraphics();
         boolean rightGuess = false;
         Log.d("check", "word: " +word);
 
@@ -166,6 +232,7 @@ public class GamePlay extends Screen {
             return rightGuess;
 
     }
+
     private void drawRightLetter(Graphics g, String word, int y, int position) {
         int x = ((320 - (word.length()*22)) / 2)  + (22 * position);
         int srcX = ((int) letter - 97) * 25;
@@ -173,7 +240,8 @@ public class GamePlay extends Screen {
         g.drawPixmap(Assets.letters, x, y, srcX, 0, 22, 32);
     }
 
-    private void drawLimb(Graphics g) {
+    private void drawLimb() {
+        Graphics g = game.getGraphics();
         //draw left leg gone!
         //g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
 
@@ -186,10 +254,12 @@ public class GamePlay extends Screen {
     private void gameStatus() {
         if(chances > 5) {
             Log.d("Over","Game Over!");
-            pickWord();
+            score = 0;
+            gameOver = true;
         }
         else if(rightGuesses == wordLen) {
             Log.d("Won", "You Won!");
+            score++;
             pickWord();
         }
     }
