@@ -1,20 +1,18 @@
 package com.mucsc3550.cassie.framework;
 
-import android.util.Log;
 import com.mucsc3550.cassie.framework.impl.AndroidGame;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class GamePlay extends Screen {
     ArrayList<Character> guessedLetters = new ArrayList<Character>();
     public static String line1, line2;
-    public static boolean checkGuess, gameOver = false;
+    public static boolean guessRight, gameOver = false;
     public static char letter = '\0';
-    public static int xKey, yKey, chances = 0, rightGuesses = 0, wordLen = 0;
+    public static int xKey, yKey, wrongGuesses = 0, rightGuesses = 0, wordLength = 0;
 
     enum GameState { Running, GameOver }
     GameState state = GameState.Running;
@@ -51,20 +49,20 @@ public class GamePlay extends Screen {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
 
-                    GetCharacterFromCoordinates(event.x, event.y);
+                    getCharacterFromCoordinates(event.x, event.y);
 
                     if(!guessedLetters.contains(letter)) {
-                        checkGuess = checkLetterGuess(line1, 200);
+                        guessRight = checkGuessedLetter(line1, 200);
                         if (line2 != null)
-                            checkGuess = checkLetterGuess(line2, 250);
+                            guessRight = checkGuessedLetter(line2, 250);
 
-                        if(!checkGuess)
+                        if(!guessRight)
                             drawLimb();
 
                     }
 
-                    gameStatus();
-                    checkGuess = false;
+                    checkGameStatus();
+                    guessRight = false;
 
                 }
             }
@@ -139,7 +137,7 @@ public class GamePlay extends Screen {
     }
 
     private void pickWord() {
-        chances = 0;
+        wrongGuesses = 0;
         rightGuesses = 0;
         line1 = null;
         line2 = null;
@@ -153,11 +151,11 @@ public class GamePlay extends Screen {
             String[] split = word.split("\\s+");
             line1 = split[0];
             line2 = split[1];
-            wordLen = line1.length() + line2.length();
+            wordLength = line1.length() + line2.length();
         }
         else {
             line1 = word;
-            wordLen = word.length();
+            wordLength = word.length();
         }
         drawGameWorld();
     }
@@ -170,15 +168,15 @@ public class GamePlay extends Screen {
         }
     }
 
-    private void GetCharacterFromCoordinates(int x, int y) {
+    private void getCharacterFromCoordinates(int x, int y) {
         yKey = -1;
         xKey = -1;
         letter = '\0';
 
-        ArrayList<Integer> yList = new ArrayList<Integer>(Assets.keys.keySet());
-        Collections.sort(yList);
+        ArrayList<Integer> yCoords = new ArrayList<Integer>(Assets.keys.keySet());
+        Collections.sort(yCoords);
 
-        for(int tempYKey : yList){
+        for(int tempYKey : yCoords){
             if(tempYKey <= y )
                 yKey = tempYKey;
         }
@@ -186,10 +184,10 @@ public class GamePlay extends Screen {
         if(yKey == -1) return;
 
         HashMap<Integer, Character> currentRow = Assets.keys.get(yKey);
-        ArrayList<Integer> xList = new ArrayList<Integer>(currentRow.keySet());
-        Collections.sort(xList);
+        ArrayList<Integer> xCoords = new ArrayList<Integer>(currentRow.keySet());
+        Collections.sort(xCoords);
 
-        for(int tempXKey : xList){
+        for(int tempXKey : xCoords){
             if(tempXKey <= x )
                 xKey = tempXKey;
         }
@@ -199,25 +197,25 @@ public class GamePlay extends Screen {
         letter = currentRow.get(xKey);
     }
 
-    private Boolean checkLetterGuess(String word, int y) {
+    private Boolean checkGuessedLetter(String word, int y) {
         Graphics g = game.getGraphics();
-        boolean rightGuess = false;
+        boolean guess = false;
 
         for(int i = 0; i < word.length(); i++) {
             if(word.charAt(i) == letter) {
                 drawRightLetter(g, word, y, i);
-                rightGuess = true;
+                guess = true;
                 rightGuesses++;
             }
         }
 
         guessedLetters.add(letter);
 
-        if(checkGuess) {
+        if(guessRight) {
             return true;
         }
         else
-            return rightGuess;
+            return guess;
 
     }
 
@@ -230,36 +228,36 @@ public class GamePlay extends Screen {
 
     private void drawLimb() {
         Graphics g = game.getGraphics();
-        if(chances == 0)
+        if(wrongGuesses == 0)
             g.drawPixmap(Assets.hangman, 126, 128, 88, 118, 32, 47);
 
-        if(chances == 1)
+        if(wrongGuesses == 1)
             g.drawPixmap(Assets.hangman, 163, 128, 125, 118, 32, 47);
 
-        if(chances == 2)
+        if(wrongGuesses == 2)
             g.drawPixmap(Assets.hangman, 157, 67, 119, 57, 8, 59);
 
-        if(chances == 3)
+        if(wrongGuesses == 3)
             g.drawPixmap(Assets.hangman, 126, 67, 88, 57, 32, 47);
 
-        if(chances == 4)
+        if(wrongGuesses == 4)
             g.drawPixmap(Assets.hangman, 163, 67, 125, 57, 32, 47);
 
-        if(chances == 5)
+        if(wrongGuesses == 5)
             g.drawPixmap(Assets.hangman, 136, 10, 97, 0, 55, 55);
 
-        chances++;
+        wrongGuesses++;
     }
 
-    private void gameStatus() {
-        if(chances > 5) {
+    private void checkGameStatus() {
+        if(wrongGuesses > 5) {
             Settings.addScore(score);
             Settings.save(game.getFileIO());
 
             score = 0;
             gameOver = true;
         }
-        else if(rightGuesses == wordLen) {
+        else if(rightGuesses == wordLength) {
             score++;
             pickWord();
         }
